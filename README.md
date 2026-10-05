@@ -1,5 +1,12 @@
 # Unit converter
 
+## What it does
+
+A tiny HTTP service that converts between units of length (m, km, mi, ft),
+mass (kg, g, lb) and temperature (c, f, k). Standard library only.
+
+## Run
+
 A tiny HTTP service that converts between units of length (m, km, mi, ft),
 mass (kg, g, lb) and temperature (c, f, k). Standard library only.
 
