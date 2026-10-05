@@ -21,3 +21,8 @@ Listens on `$PORT` (default **8080**). Example:
     scripts/test.sh
 
 Prints `TESTS: n/n` and exits 0 when everything passes.
+
+## Examples
+
+    curl "localhost:8080/convert?value=100&from=c&to=f"
+    curl "localhost:8080/convert?value=1&from=kg&to=lb"
