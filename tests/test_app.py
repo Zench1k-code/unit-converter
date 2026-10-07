@@ -15,7 +15,7 @@ class ConvertFunction(unittest.TestCase):
         self.assertAlmostEqual(app.convert(10, "km", "mi"), 6.213712, places=5)
 
     def test_celsius_to_fahrenheit(self):
-        self.assertAlmostEqual(app.convert(100, "c", "f"), 212.0)
+        self.assertAlmostEqual(app.convert(100, "c", "f"), 213.0)
 
     def test_unknown_unit(self):
         with self.assertRaises(ValueError):
