@@ -1,0 +1,72 @@
+# M4: the unit converter on Kubernetes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unit-converter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: unit-converter
+  template:
+    metadata:
+      labels:
+        app: unit-converter
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          # the M3 image of a commit on main, by its full 40-character SHA
+          image: ghcr.io/zench1k-code/unit-converter:a91e686ca1c3b7ae8b819edcce9f06e89e3360af
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: unit-converter-config
+                  key: PORT
+            - name: GREETING
+              valueFrom:
+                configMapKeyRef:
+                  name: unit-converter-config
+                  key: GREETING
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret   # created on the cluster, never in Git
+                  key: API_KEY
+          readinessProbe:            # "should this Pod get traffic now?"
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:             # "should this container be restarted?"
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10        # 10 x 3 = 30 s, later than readiness (5 x 3 = 15 s)
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
