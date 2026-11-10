@@ -1,0 +1,12 @@
+# One stable name in front of the Pods: http://unit-converter/
+apiVersion: v1
+kind: Service
+metadata:
+  name: unit-converter
+spec:
+  selector:
+    app: unit-converter
+  ports:
+    - name: http
+      port: 80
+      targetPort: http   # the container port named http, which follows PORT
