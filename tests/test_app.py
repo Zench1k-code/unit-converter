@@ -53,6 +53,15 @@ class HttpService(unittest.TestCase):
         status, _ = self.get("/convert?value=abc&from=km&to=mi")
         self.assertEqual(status, 400)
 
+    def test_root_reads_greeting(self):
+        os.environ["GREETING"] = "salem"
+        try:
+            status, body = self.get("/")
+        finally:
+            del os.environ["GREETING"]
+        self.assertEqual(status, 200)
+        self.assertEqual(body["greeting"], "salem")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -39,7 +39,9 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {"status": "ok"})
         if url.path == "/":
             return self._send(200, {"service": "unit-converter",
-                                    "usage": "/convert?value=10&from=km&to=mi"})
+                                    "usage": "/convert?value=10&from=km&to=mi",
+                                    "greeting": os.environ.get("GREETING", "hello"),
+                                    "api_key_configured": bool(os.environ.get("API_KEY"))})
         if url.path == "/convert":
             q = parse_qs(url.query)
             try:
