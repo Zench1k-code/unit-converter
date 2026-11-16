@@ -1,0 +1,19 @@
+# M5: Argo CD deploys k8s/ from main and keeps the cluster equal to Git.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: unit-converter
+  namespace: argocd              # Argo CD only looks for Applications here
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Zench1k-code/unit-converter
+    targetRevision: main         # the branch pull requests are merged into
+    path: k8s                    # the M4 manifests
+  destination:
+    server: https://kubernetes.default.svc   # the cluster Argo CD runs in
+    namespace: default           # where the service ran in Week 9
+  syncPolicy:
+    automated:                   # nobody presses "Sync"
+      prune: true                # delete from the cluster what is deleted from Git
+      selfHeal: true             # undo changes made by hand in the cluster
