@@ -4,3 +4,12 @@ __pycache__/
 .env
 .idea/
 .vscode/
+
+# Terraform: state holds real IDs and secrets; .terraform/ is a download cache.
+# Do NOT add .terraform.lock.hcl here - it must be committed.
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.tfplan
+crash.log
